@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>সদস্য ফর্ম | বালাখুর দরিদ্র কল্যাণ তহবিল</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12261f; --muted:#5b6c65; --bg:#e9efeb; --surface:#fff; --line:#d3ddd7;
+  --g900:#0b3b2e; --g700:#11684f; --g100:#e1efe8; --gold:#d9a62e; --red:#c0392b; --red-bg:#fbeceb;
+  --r-card:16px; --r-field:10px;
+  --sans:'Hind Siliguri','Noto Sans Bengali','Kalpurush','SolaimanLipi',system-ui,sans-serif;
+  --serif:'Noto Serif Bengali','Hind Siliguri','Kalpurush',serif;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+
+/* header */
+.top{background:var(--g900);color:#fff;border-bottom:4px solid var(--gold)}
+.top-in{max-width:1140px;margin:0 auto;padding:18px 20px;display:flex;align-items:center;gap:16px;justify-content:space-between}
+.brand h1{margin:0;font-family:var(--serif);font-weight:800;font-size:clamp(20px,3.4vw,28px);line-height:1.3}
+.brand p{margin:2px 0 0;color:#bfd8cd;font-size:15px}
+.top-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.conn{display:flex;align-items:center;gap:7px;font-size:13.5px;background:rgba(255,255,255,.1);padding:6px 12px;border-radius:99px;white-space:nowrap}
+.conn i{width:9px;height:9px;border-radius:50%;background:#f0b429;display:block}
+.conn.ok i{background:#4ade80}.conn.bad i{background:#f87171}
+.icon-btn{width:40px;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.28);background:transparent;color:#fff;cursor:pointer;display:grid;place-items:center}
+.icon-btn:hover{background:rgba(255,255,255,.12)}
+.icon-btn svg{width:20px;height:20px}
+
+/* layout */
+.wrap{max-width:1140px;margin:0 auto;padding:22px 20px 40px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:22px;align-items:start}
+.banner{max-width:1140px;margin:16px auto 0;padding:0 20px}
+.banner div{background:#fff7e0;border:1px solid #ecd48a;color:#6b4e00;border-radius:12px;padding:12px 16px;font-size:15px}
+.banner button{font:inherit;color:var(--g700);font-weight:600;background:none;border:0;text-decoration:underline;cursor:pointer;padding:0}
+
+/* form sections */
+form{display:flex;flex-direction:column;gap:18px}
+fieldset{border:1px solid var(--line);background:var(--surface);border-radius:var(--r-card);margin:0;padding:0;min-width:0}
+legend{padding:0;float:left;width:100%}
+.sec-head{padding:16px 22px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:1px;clear:both}
+.sec-head b{font-family:var(--serif);font-size:18px;color:var(--g900);font-weight:800}
+.sec-head span{font-size:14px;color:var(--muted)}
+.grid{padding:20px 22px 22px;display:grid;grid-template-columns:1fr 1fr;gap:18px 18px;clear:both}
+.full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field>label,.lbl{font-weight:600;font-size:15px}
+.req{color:var(--red);margin-left:3px}
+.opt{font-weight:400;color:var(--muted);font-size:13px;margin-left:6px}
+input[type=text],input[type=tel],input[type=date],input[type=number],select,textarea{
+  width:100%;height:46px;padding:0 14px;border:1.5px solid var(--line);border-radius:var(--r-field);background:#fbfdfc;
+  font:inherit;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+textarea{height:auto;padding:10px 14px;resize:vertical;min-height:72px}
+input::placeholder,textarea::placeholder{color:#9aa9a2}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--g700);box-shadow:0 0 0 4px rgba(17,104,79,.14);background:#fff}
+input[readonly]{background:#eef3f0;color:#4b5c55}
+.field.err input,.field.err select,.field.err textarea{border-color:var(--red);background:var(--red-bg)}
+.msg{color:var(--red);font-size:13.5px;min-height:0;display:none}
+.field.err .msg{display:block}
+.hint{font-size:13px;color:var(--muted)}
+
+.money{position:relative}
+.money span{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:700;color:var(--g700)}
+.money input{padding-left:34px}
+
+.check{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1.5px dashed var(--line);border-radius:var(--r-field);cursor:pointer;background:#fbfdfc;font-weight:500}
+.check input{width:20px;height:20px;accent-color:var(--g700);margin:0}
+.check:has(input:checked){border-style:solid;border-color:var(--g700);background:var(--g100)}
+
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1.5px solid var(--line);border-radius:var(--r-field);overflow:hidden;background:#fbfdfc}
+.seg label{margin:0;text-align:center;padding:10px 8px;cursor:pointer;font-weight:600;color:var(--muted);transition:background .15s,color .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label+label{border-left:1.5px solid var(--line)}
+.seg input:checked+span.on{}
+.seg label:has(input[value=Active]:checked){background:var(--g700);color:#fff}
+.seg label:has(input[value=Inactive]:checked){background:#6b7570;color:#fff}
+.seg label:has(input:focus-visible){outline:3px solid var(--gold);outline-offset:-3px}
+
+/* photo */
+.photo-row{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.drop{width:132px;height:132px;border-radius:14px;border:2px dashed #9fb7ac;background:#f4f9f6;display:grid;place-items:center;text-align:center;cursor:pointer;overflow:hidden;position:relative;color:var(--g700);font-size:13.5px;padding:8px;transition:border-color .15s,background .15s}
+.drop:hover,.drop.over{border-color:var(--g700);background:var(--g100)}
+.drop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.drop svg{width:30px;height:30px;display:block;margin:0 auto 4px}
+.photo-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.btn{font:inherit;font-weight:600;border-radius:10px;border:1.5px solid var(--line);background:#fff;color:var(--ink);padding:9px 16px;cursor:pointer;min-height:42px}
+.btn:hover{border-color:var(--g700);color:var(--g700)}
+.btn.primary{background:var(--g700);border-color:var(--g700);color:#fff;font-size:17px;padding:11px 26px;min-height:50px}
+.btn.primary:hover{background:var(--g900);border-color:var(--g900);color:#fff}
+.btn:disabled{opacity:.6;cursor:wait}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* action bar */
+.actions{position:sticky;bottom:0;background:rgba(233,239,235,.94);backdrop-filter:blur(6px);padding:12px 0 calc(12px + env(safe-area-inset-bottom,0px));display:flex;gap:12px;justify-content:flex-end;align-items:center;border-top:1px solid var(--line);margin-top:-4px}
+.actions .status{margin-right:auto;font-size:14px;color:var(--red);font-weight:500}
+
+/* card preview */
+aside{position:sticky;top:16px}
+.card-label{font-size:14px;color:var(--muted);margin:0 0 8px 4px}
+.idcard{background:var(--g900);color:#fff;border-radius:18px;padding:18px 18px 16px;border:2px solid var(--gold);box-shadow:0 14px 30px -14px rgba(11,59,46,.7);position:relative;overflow:hidden}
+.idcard::after{content:"";position:absolute;right:-60px;bottom:-60px;width:180px;height:180px;border:26px solid rgba(217,166,46,.12);border-radius:50%}
+.ic-head{text-align:center;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:10px;margin-bottom:14px}
+.ic-head b{display:block;font-family:var(--serif);font-size:16.5px;line-height:1.35}
+.ic-head span{font-size:12.5px;color:var(--gold);font-weight:600}
+.ic-body{display:flex;gap:14px;align-items:flex-start;position:relative;z-index:1}
+.ic-photo{width:92px;height:108px;border-radius:10px;background:#164e3f;border:2px solid rgba(255,255,255,.35);flex-shrink:0;overflow:hidden;display:grid;place-items:center}
+.ic-photo img{width:100%;height:100%;object-fit:cover}
+.ic-photo svg{width:42px;height:42px;color:#6fa28f}
+.ic-info{min-width:0;flex:1}
+.ic-name{font-family:var(--serif);font-size:19px;font-weight:800;line-height:1.3;word-break:break-word}
+.ic-sub{font-size:13.5px;color:#bfd8cd;margin-top:2px;word-break:break-word}
+.ic-id{display:inline-block;margin-top:8px;background:var(--gold);color:#2a1f00;font-weight:700;padding:2px 10px;border-radius:6px;font-size:14px;letter-spacing:.3px}
+.ic-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);position:relative;z-index:1}
+.ic-meta small{display:block;color:#9cc2b4;font-size:12px}
+.ic-meta div{font-weight:600;font-size:14.5px;word-break:break-word}
+.chip{display:inline-flex;align-items:center;gap:6px}
+.chip::before{content:"";width:8px;height:8px;border-radius:50%;background:#4ade80}
+.chip.off::before{background:#9aa6a1}
+.aside-note{font-size:13.5px;color:var(--muted);margin:12px 4px 0}
+
+/* success */
+.done{grid-column:1/-1;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:44px 24px;text-align:center;max-width:560px;margin:10px auto;display:none}
+.done .tick{width:64px;height:64px;border-radius:50%;background:var(--g100);color:var(--g700);display:grid;place-items:center;margin:0 auto 14px}
+.done .tick svg{width:34px;height:34px}
+.done h2{margin:0 0 6px;font-family:var(--serif);color:var(--g900)}
+.done .big{display:inline-block;margin:10px 0 22px;font-size:26px;font-weight:700;background:var(--g100);color:var(--g900);padding:6px 20px;border-radius:10px;letter-spacing:.5px}
+body.finished .wrap>form,body.finished .wrap>aside{display:none}
+body.finished .done{display:block}
+
+/* dialog */
+dialog{border:0;border-radius:var(--r-card);padding:0;width:min(520px,calc(100vw - 32px));box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+dialog::backdrop{background:rgba(8,30,24,.55)}
+.dlg{padding:22px}
+.dlg h3{margin:0 0 4px;font-family:var(--serif);color:var(--g900)}
+.dlg p{margin:0 0 14px;color:var(--muted);font-size:14.5px}
+.dlg .row{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.dlg .test{font-size:14px;margin-top:8px;min-height:20px}
+
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;padding:11px 20px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:50;max-width:calc(100vw - 32px);text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.spin{width:18px;height:18px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:inline-block;vertical-align:-3px;margin-right:8px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+@media (max-width:920px){
+  .wrap{grid-template-columns:1fr;padding:16px 14px 30px}
+  aside{position:static;order:2}
+  .top-in{padding:14px}
+  .conn span{display:none}.conn{padding:8px}
+}
+@media (max-width:560px){
+  .grid{grid-template-columns:1fr;padding:16px}
+  .sec-head{padding:14px 16px 10px}
+  .actions{flex-wrap:wrap}
+  .actions .btn{flex:1}
+  .actions .status{flex-basis:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:.01ms!important}}
+@media print{.top-actions,.actions,.banner{display:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <h1>বালাখুর দরিদ্র কল্যাণ তহবিল</h1>
+      <p>সদস্য ফর্ম</p>
+    </div>
+    <div class="top-actions">
+      <div class="conn" id="conn" title="Google Sheet সংযোগ"><i></i><span id="connText">সংযোগ যাচাই হচ্ছে…</span></div>
+    </div>
+  </div>
+</header>
+
+
+<main class="wrap">
+<form id="f" novalidate autocomplete="off">
+
+
+  <fieldset>
+    <legend><div class="sec-head"><b>ব্যক্তিগত তথ্য</b><span>সদস্যের পরিচয় ও পারিবারিক তথ্য</span></div></legend>
+    <div class="grid">
+      <div class="field full">
+        <span class="lbl">সদস্যের ছবি<span class="opt">ঐচ্ছিক</span></span>
+        <div class="photo-row">
+          <div class="drop" id="drop" tabindex="0" role="button" aria-label="ছবি আপলোড করুন">
+            <div id="dropHint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              ছবি বাছাই করুন
+            </div>
+          </div>
+          <div class="photo-actions">
+            <button type="button" class="btn" id="pickBtn">ছবি নির্বাচন</button>
+            <button type="button" class="btn" id="rmBtn" hidden>ছবি মুছুন</button>
+            <span class="hint">JPG/PNG — স্বয়ংক্রিয়ভাবে ছোট করে নেওয়া হবে</span>
+          </div>
+          <input type="file" id="photo" accept="image/*" hidden>
+        </div>
+        <span class="msg" data-for="photo"></span>
+      </div>
+
+      <div class="field">
+        <label for="memberId">সদস্য আইডি</label>
+        <input type="text" id="memberId" name="memberId" readonly value="স্বয়ংক্রিয়">
+        <span class="hint">সংরক্ষণের সময় নিজে থেকেই তৈরি হবে</span>
+      </div>
+      <div class="field" data-f="name">
+        <label for="name">সদস্যের নাম<span class="req">*</span></label>
+        <input type="text" id="name" name="name" placeholder="পূর্ণ নাম লিখুন" data-req>
+        <span class="msg"></span>
+      </div>
+
+      <div class="field" data-f="fatherHusband">
+        <label for="fatherHusband">পিতা/স্বামীর নাম<span class="req">*</span></label>
+        <input type="text" id="fatherHusband" name="fatherHusband" data-req>
+        <span class="msg"></span>
+      </div>
+      <div class="field" data-f="mother">
+        <label for="mother">মাতার নাম<span class="opt">ঐচ্ছিক</span></label>
+        <input type="text" id="mother" name="mother">
+        <span class="msg"></span>
+      </div>
+
+      <div class="field" data-f="dob">
+        <label for="dob">জন্ম তারিখ<span class="opt">ঐচ্ছিক</span></label>
+        <input type="date" id="dob" name="dob">
+        <span class="msg"></span>
+      </div>
+      <div class="field" data-f="marital">
+        <label for="marital">বৈবাহিক অবস্থা<span class="opt">ঐচ্ছিক</span></label>
+        <select id="marital" name="marital">
+          <option value="">— নির্বাচন করুন —</option>
+          <option>অবিবাহিত</option><option>বিবাহিত</option><option>বিধবা/বিপত্নীক</option><option>তালাকপ্রাপ্ত</option>
+        </select>
+        <span class="msg"></span>
+      </div>
+
+      <div class="field full" data-f="nid">
+        <label for="nid">জাতীয় পরিচয়পত্র (NID)<span class="opt">ঐচ্ছিক</span></label>
+        <input type="text" id="nid" name="nid" inputmode="numeric" data-digits placeholder="১০, ১৩ বা ১৭ সংখ্যা" maxlength="17">
+        <span class="msg"></span>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend><div class="sec-head"><b>যোগাযোগ</b><span>সদস্যের সাথে যোগাযোগের নম্বর</span></div></legend>
+    <div class="grid">
+      <div class="field" data-f="mobile">
+        <label for="mobile">মোবাইল নম্বর<span class="req">*</span></label>
+        <input type="tel" id="mobile" name="mobile" inputmode="numeric" data-digits placeholder="01XXXXXXXXX" maxlength="11" data-req>
+        <span class="msg"></span>
+      </div>
+      <div class="field" data-f="altMobile">
+        <label for="altMobile">বিকল্প মোবাইল নম্বর<span class="opt">ঐচ্ছিক</span></label>
+        <input type="tel" id="altMobile" name="altMobile" inputmode="numeric" data-digits placeholder="01XXXXXXXXX" maxlength="11">
+        <span class="msg"></span>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend><div class="sec-head"><b>ঠিকানা</b><span>বর্তমান ও স্থায়ী ঠিকানা</span></div></legend>
+    <div class="grid">
+      <div class="field full" data-f="presentAddress">
+        <label for="presentAddress">বর্তমান ঠিকানা<span class="req">*</span></label>
+        <textarea id="presentAddress" name="presentAddress" rows="2" placeholder="বাড়ি/রাস্তা, এলাকা" data-req></textarea>
+        <span class="msg"></span>
+      </div>
+      <div class="full">
+        <label class="check"><input type="checkbox" id="sameAddr" name="sameAddress"> বর্তমান ও স্থায়ী ঠিকানা একই</label>
+      </div>
+      <div class="field full" data-f="permanentAddress">
+        <label for="permanentAddress">স্থায়ী ঠিকানা<span class="opt">ঐচ্ছিক</span></label>
+        <textarea id="permanentAddress" name="permanentAddress" rows="2"></textarea>
+        <span class="msg"></span>
+      </div>
+      <div class="field">
+        <label for="village">গ্রাম/মহল্লা<span class="opt">ঐচ্ছিক</span></label>
+        <input type="text" id="village" name="village">
+      </div>
+      <div class="field">
+        <label for="postOffice">ডাকঘর<span class="opt">ঐচ্ছিক</span></label>
+        <input type="text" id="postOffice" name="postOffice">
+      </div>
+      <div class="field">
+        <label for="district">জেলা<span class="opt">ঐচ্ছিক</span></label>
+        <select id="district" name="district"><option value="">— জেলা নির্বাচন —</option></select>
+      </div>
+      <div class="field">
+        <label for="upazila">উপজেলা<span class="opt">ঐচ্ছিক</span></label>
+        <input type="text" id="upazila" name="upazila" list="upazilaList" placeholder="লিখুন বা তালিকা থেকে বাছুন">
+        <datalist id="upazilaList"></datalist>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend><div class="sec-head"><b>পেশা</b><span>কর্মক্ষেত্রের তথ্য</span></div></legend>
+    <div class="grid">
+      <div class="field">
+        <label for="occupation">পেশা<span class="opt">ঐচ্ছিক</span></label>
+        <select id="occupation" name="occupation">
+          <option value="">— নির্বাচন করুন —</option>
+          <option>কৃষক</option><option>ব্যবসায়ী</option><option>চাকরিজীবী (সরকারি)</option><option>চাকরিজীবী (বেসরকারি)</option>
+          <option>শিক্ষক</option><option>শিক্ষার্থী</option><option>প্রবাসী</option><option>দিনমজুর</option>
+          <option>চালক</option><option>গৃহিণী</option><option>অন্যান্য</option>
+        </select>
+      </div>
+      <div class="field" id="occOtherWrap" hidden>
+        <label for="occOther">পেশার নাম লিখুন</label>
+        <input type="text" id="occOther" name="occOther">
+      </div>
+      <div class="field">
+        <label for="orgName">প্রতিষ্ঠানের নাম<span class="opt">ঐচ্ছিক</span></label>
+        <input type="text" id="orgName" name="orgName">
+      </div>
+      <div class="field full">
+        <label for="workAddress">কর্মস্থলের ঠিকানা<span class="opt">ঐচ্ছিক</span></label>
+        <input type="text" id="workAddress" name="workAddress">
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend><div class="sec-head"><b>সদস্যপদ</b><span>তহবিলে যুক্ত হওয়ার তথ্য</span></div></legend>
+    <div class="grid">
+      <div class="field" data-f="joinDate">
+        <label for="joinDate">সদস্য হওয়ার তারিখ<span class="req">*</span></label>
+        <input type="date" id="joinDate" name="joinDate" data-req>
+        <span class="msg"></span>
+      </div>
+      <div class="field" data-f="monthlyChanda">
+        <label for="monthlyChanda">মাসিক চাঁদার পরিমাণ<span class="req">*</span></label>
+        <div class="money"><span>৳</span><input type="text" id="monthlyChanda" name="monthlyChanda" inputmode="numeric" data-digits placeholder="0" data-req></div>
+        <span class="msg"></span>
+      </div>
+      <div class="field full">
+        <span class="lbl">সদস্যের অবস্থা<span class="req">*</span></span>
+        <div class="seg" role="radiogroup" aria-label="সদস্যের অবস্থা">
+          <label><input type="radio" name="status" value="Active" checked> সক্রিয় (Active)</label>
+          <label><input type="radio" name="status" value="Inactive"> নিষ্ক্রিয় (Inactive)</label>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="actions">
+    <span class="status" id="formStatus" role="alert"></span>
+    <button type="button" class="btn" id="resetBtn">ফর্ম পরিষ্কার করুন</button>
+    <button type="submit" class="btn primary" id="saveBtn">সদস্য সংরক্ষণ করুন</button>
+  </div>
+</form>
+
+<aside aria-label="সদস্য কার্ড প্রিভিউ">
+  <p class="card-label">সদস্য কার্ড (লাইভ প্রিভিউ)</p>
+  <div class="idcard">
+    <div class="ic-head"><b>বালাখুর দরিদ্র কল্যাণ তহবিল</b><span>সদস্য কার্ড</span></div>
+    <div class="ic-body">
+      <div class="ic-photo" id="icPhoto">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"/></svg>
+      </div>
+      <div class="ic-info">
+        <div class="ic-name" id="icName">সদস্যের নাম</div>
+        <div class="ic-sub" id="icFather">পিতা/স্বামীর নাম</div>
+        <span class="ic-id" id="icId">স্বয়ংক্রিয়</span>
+      </div>
+    </div>
+    <div class="ic-meta">
+      <div><small>মোবাইল</small><span id="icMobile">—</span></div>
+      <div><small>অবস্থা</small><span class="chip" id="icStatus">সক্রিয়</span></div>
+      <div><small>সদস্য হয়েছেন</small><span id="icJoin">—</span></div>
+      <div><small>মাসিক চাঁদা</small><span id="icChanda">—</span></div>
+    </div>
+  </div>
+  <p class="aside-note">ফর্ম পূরণের সাথে সাথে কার্ডটি বদলাবে। ভুল থাকলে সংরক্ষণের আগেই ঠিক করে নিন।</p>
+</aside>
+
+<section class="done" id="done">
+  <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+  <h2>সদস্য সংরক্ষিত হয়েছে</h2>
+  <div id="doneName"></div>
+  <div class="big" id="doneId"></div><br>
+  <button type="button" class="btn primary" id="againBtn">আরেকজন সদস্য যোগ করুন</button>
+</section>
+</main>
+
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ============ কনফিগারেশন ============ */
+// Apps Script Web App URL এখানে একবার বসিয়ে দিন। ব্যবহারকারীরা এটি বদলাতে পারবে না।
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbLuB1LjBZxMzx7u3EnUeKuzEgR1eoBZg9wRuzXLaZIRTxhv-i0AMb-svXs1kXrdMB/exec";
+const ID_PREFIX = "BIWF"; // Code.gs এর ID_PREFIX এর সাথে মিল রাখুন
+
+/* ============ হেল্পার ============ */
+const $ = s => document.querySelector(s);
+const bnDigits = "০১২৩৪৫৬৭৮৯";
+const toEn = s => String(s).replace(/[০-৯]/g, d => bnDigits.indexOf(d));
+const toBn = s => String(s).replace(/[0-9]/g, d => bnDigits[d]);
+const LS = {
+  get(k){ try{ return localStorage.getItem(k) }catch(e){ return null } },
+  set(k,v){ try{ localStorage.setItem(k,v) }catch(e){} }
+};
+const getUrl = () => SCRIPT_URL.trim();
+
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove("show"), 3200);
+}
+
+/* ============ জেলা/উপজেলা ============ */
+const DISTRICTS = ["বাগেরহাট","বান্দরবান","বরগুনা","বরিশাল","ভোলা","বগুড়া","ব্রাহ্মণবাড়িয়া","চাঁদপুর","চট্টগ্রাম","চুয়াডাঙ্গা","কুমিল্লা","কক্সবাজার","ঢাকা","দিনাজপুর","ফরিদপুর","ফেনী","গাইবান্ধা","গাজীপুর","গোপালগঞ্জ","হবিগঞ্জ","জামালপুর","যশোর","ঝালকাঠি","ঝিনাইদহ","জয়পুরহাট","খাগড়াছড়ি","খুলনা","কিশোরগঞ্জ","কুড়িগ্রাম","কুষ্টিয়া","লক্ষ্মীপুর","লালমনিরহাট","মাদারীপুর","মাগুরা","মানিকগঞ্জ","মেহেরপুর","মৌলভীবাজার","মুন্সীগঞ্জ","ময়মনসিংহ","নওগাঁ","নড়াইল","নারায়ণগঞ্জ","নরসিংদী","নাটোর","নেত্রকোণা","নীলফামারী","নোয়াখালী","পাবনা","পঞ্চগড়","পটুয়াখালী","পিরোজপুর","রাজবাড়ী","রাজশাহী","রাঙ্গামাটি","রংপুর","সাতক্ষীরা","শরীয়তপুর","শেরপুর","সিরাজগঞ্জ","সুনামগঞ্জ","সিলেট","টাঙ্গাইল","ঠাকুরগাঁও","চাঁপাইনবাবগঞ্জ"].sort((a,b)=>a.localeCompare(b,"bn"));
+const UPAZILAS = { "জয়পুরহাট":["জয়পুরহাট সদর","কালাই","ক্ষেতলাল","আক্কেলপুর","পাঁচবিবি"] };
+$("#district").insertAdjacentHTML("beforeend", DISTRICTS.map(d=>`<option>${d}</option>`).join(""));
+$("#district").addEventListener("change", e=>{
+  $("#upazilaList").innerHTML = (UPAZILAS[e.target.value]||[]).map(u=>`<option value="${u}">`).join("");
+});
+
+/* ============ ইনপুট আচরণ ============ */
+// বাংলা সংখ্যা → ইংরেজি সংখ্যা
+document.querySelectorAll("[data-digits]").forEach(el=>{
+  el.addEventListener("input", ()=>{
+    const pos = el.selectionStart;
+    el.value = toEn(el.value).replace(/[^0-9]/g,"");
+    try{ el.setSelectionRange(pos,pos) }catch(e){}
+  });
+});
+
+// একই ঠিকানা
+const present = $("#presentAddress"), perm = $("#permanentAddress"), same = $("#sameAddr");
+function syncAddr(){
+  if(same.checked){ perm.value = present.value; perm.readOnly = true; }
+  else { perm.readOnly = false; }
+}
+same.addEventListener("change", ()=>{ syncAddr(); if(!same.checked) perm.value=""; });
+present.addEventListener("input", ()=>{ if(same.checked) perm.value = present.value; });
+
+// পেশা - অন্যান্য
+$("#occupation").addEventListener("change", e=>{
+  const o = e.target.value === "অন্যান্য";
+  $("#occOtherWrap").hidden = !o;
+  if(o) $("#occOther").focus(); else $("#occOther").value="";
+});
+
+/* ============ ছবি ============ */
+let photoData = null;
+const drop = $("#drop"), fileIn = $("#photo");
+function setPhoto(dataUrl){
+  photoData = dataUrl;
+  drop.querySelectorAll("img").forEach(i=>i.remove());
+  $("#icPhoto").querySelectorAll("img").forEach(i=>i.remove());
+  if(dataUrl){
+    drop.insertAdjacentHTML("beforeend", `<img alt="সদস্যের ছবি" src="${dataUrl}">`);
+    $("#icPhoto").insertAdjacentHTML("beforeend", `<img alt="" src="${dataUrl}">`);
+    $("#dropHint").style.visibility="hidden";
+  } else { $("#dropHint").style.visibility="visible"; fileIn.value=""; }
+  $("#rmBtn").hidden = !dataUrl;
+  $("#icPhoto svg").style.display = dataUrl ? "none" : "block";
+}
+function processFile(file){
+  const box = document.querySelector('[data-for="photo"]');
+  box.style.display="none";
+  if(!file) return;
+  if(!/^image\//.test(file.type)){ box.textContent="শুধু ছবি (JPG/PNG) দেওয়া যাবে।"; box.style.display="block"; return; }
+  const url = URL.createObjectURL(file), img = new Image();
+  img.onload = ()=>{
+    const S = 480, side = Math.min(img.width, img.height);
+    const c = document.createElement("canvas"); c.width = c.height = Math.min(S, side);
+    c.getContext("2d").drawImage(img, (img.width-side)/2, (img.height-side)/2, side, side, 0, 0, c.width, c.height);
+    URL.revokeObjectURL(url);
+    setPhoto(c.toDataURL("image/jpeg", .82));
+  };
+  img.onerror = ()=>{ box.textContent="ছবিটি পড়া যায়নি, অন্য ছবি চেষ্টা করুন।"; box.style.display="block"; };
+  img.src = url;
+}
+drop.addEventListener("click", ()=>fileIn.click());
+drop.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fileIn.click(); } });
+$("#pickBtn").addEventListener("click", ()=>fileIn.click());
+$("#rmBtn").addEventListener("click", ()=>setPhoto(null));
+fileIn.addEventListener("change", ()=>processFile(fileIn.files[0]));
+["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over")}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("over")}));
+drop.addEventListener("drop", e=>processFile(e.dataTransfer.files[0]));
+
+/* ============ লাইভ কার্ড ============ */
+const fmtDate = v => v ? toBn(new Date(v+"T00:00:00").toLocaleDateString("bn-BD",{day:"numeric",month:"long",year:"numeric"})) : "—";
+function updateCard(){
+  const f = $("#f");
+  $("#icName").textContent = f.name.value.trim() || "সদস্যের নাম";
+  $("#icFather").textContent = f.fatherHusband.value.trim() ? "পিতা/স্বামী: " + f.fatherHusband.value.trim() : "পিতা/স্বামীর নাম";
+  $("#icMobile").textContent = f.mobile.value ? toBn(f.mobile.value) : "—";
+  $("#icJoin").textContent = fmtDate(f.joinDate.value);
+  $("#icChanda").textContent = f.monthlyChanda.value ? "৳ " + toBn(Number(f.monthlyChanda.value).toLocaleString("en-IN")) : "—";
+  const active = f.status.value === "Active";
+  const st = $("#icStatus"); st.textContent = active ? "সক্রিয়" : "নিষ্ক্রিয়"; st.classList.toggle("off", !active);
+}
+$("#f").addEventListener("input", updateCard);
+$("#f").addEventListener("change", updateCard);
+
+/* ============ ভ্যালিডেশন ============ */
+const RULES = {
+  name: v => v ? "" : "সদস্যের নাম লিখুন",
+  fatherHusband: v => v ? "" : "পিতা বা স্বামীর নাম লিখুন",
+  mobile: v => !v ? "মোবাইল নম্বর লিখুন" : /^01[3-9]\d{8}$/.test(v) ? "" : "সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন (যেমন 01712345678)",
+  altMobile: v => !v || /^01[3-9]\d{8}$/.test(v) ? "" : "সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন",
+  nid: v => !v || [10,13,17].includes(v.length) ? "" : "NID নম্বর ১০, ১৩ বা ১৭ সংখ্যার হতে হবে",
+  presentAddress: v => v ? "" : "বর্তমান ঠিকানা লিখুন",
+  joinDate: v => v ? "" : "সদস্য হওয়ার তারিখ দিন",
+  monthlyChanda: v => !v ? "মাসিক চাঁদার পরিমাণ লিখুন" : Number(v) > 0 ? "" : "চাঁদার পরিমাণ ০ এর বেশি হতে হবে",
+  dob: v => !v || v <= new Date().toISOString().slice(0,10) ? "" : "জন্ম তারিখ ভবিষ্যতের হতে পারে না"
+};
+function validate(){
+  let first = null;
+  for(const [k, rule] of Object.entries(RULES)){
+    const wrap = document.querySelector(`[data-f="${k}"]`); if(!wrap) continue;
+    const input = wrap.querySelector("input,select,textarea");
+    const m = rule(input.value.trim());
+    wrap.classList.toggle("err", !!m);
+    wrap.querySelector(".msg").textContent = m;
+    if(m && !first) first = input;
+  }
+  return first;
+}
+document.querySelectorAll("[data-f] input,[data-f] select,[data-f] textarea").forEach(el=>{
+  el.addEventListener("blur", ()=>{
+    const k = el.closest("[data-f]").dataset.f, m = RULES[k](el.value.trim());
+    const w = el.closest("[data-f]"); w.classList.toggle("err", !!m); w.querySelector(".msg").textContent = m;
+  });
+});
+
+/* ============ Google Sheet ============ */
+function setConn(state, text){
+  const c = $("#conn"); c.className = "conn " + state; $("#connText").textContent = text;
+}
+async function api(path, opts){
+  const url = getUrl(); if(!url) throw new Error("no-url");
+  const ctl = new AbortController(); const t = setTimeout(()=>ctl.abort(), 45000);
+  try{
+    const r = await fetch(path ? url + path : url, {...opts, signal: ctl.signal});
+    return await r.json();
+  } finally { clearTimeout(t); }
+}
+async function refreshId(){
+  if(!getUrl()){ setConn("bad", "সংযুক্ত নয়"); return; }
+  setConn("", "যাচাই হচ্ছে…");
+  try{
+    const j = await api("?action=nextId");
+    if(!j.ok){ setConn("bad", "সংযোগ ব্যর্থ"); return; }
+    $("#memberId").value = j.id; $("#icId").textContent = j.id;
+    setConn("ok", "Google Sheet সংযুক্ত");
+  }catch(e){ setConn("bad", "সংযোগ ব্যর্থ"); }
+}
+
+function collect(){
+  const f = $("#f"), v = n => f[n].value.trim();
+  return {
+    name:v("name"), fatherHusband:v("fatherHusband"), mother:v("mother"), dob:v("dob"), marital:v("marital"), nid:v("nid"),
+    mobile:v("mobile"), altMobile:v("altMobile"),
+    presentAddress:v("presentAddress"), sameAddress: same.checked ? "হ্যাঁ" : "না",
+    permanentAddress: same.checked ? v("presentAddress") : v("permanentAddress"),
+    village:v("village"), postOffice:v("postOffice"), upazila:v("upazila"), district:v("district"),
+    occupation: f.occupation.value === "অন্যান্য" ? (v("occOther") || "অন্যান্য") : f.occupation.value,
+    orgName:v("orgName"), workAddress:v("workAddress"),
+    joinDate:v("joinDate"), monthlyChanda:Number(v("monthlyChanda")), status:f.status.value,
+    photo: photoData ? { data: photoData.split(",")[1], mime: "image/jpeg" } : null
+  };
+}
+
+$("#f").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const st = $("#formStatus"); st.textContent = "";
+  const bad = validate();
+  if(bad){ st.textContent = "লাল চিহ্নিত ঘরগুলো ঠিক করুন।"; bad.scrollIntoView({behavior:"smooth",block:"center"}); bad.focus({preventScroll:true}); return; }
+  if(!getUrl()){ st.textContent = "ফর্মে Google Sheet লিংক বসানো হয়নি। অ্যাডমিনকে জানান।"; return; }
+
+  const btn = $("#saveBtn"), old = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>সংরক্ষণ হচ্ছে…';
+  try{
+    const j = await api("", { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(collect()) });
+    if(!j.ok) throw new Error(j.error || "সংরক্ষণ করা যায়নি");
+    $("#doneId").textContent = j.id; $("#doneName").textContent = $("#name").value.trim();
+    document.body.classList.add("finished"); window.scrollTo({top:0,behavior:"smooth"});
+  }catch(err){
+    st.textContent = err.name === "AbortError" ? "সময় শেষ হয়ে গেছে, ইন্টারনেট দেখে আবার চেষ্টা করুন।"
+      : (err.message && err.message !== "Failed to fetch" ? err.message : "সংযোগে সমস্যা হয়েছে। ইন্টারনেট ও Apps Script লিংক দেখে আবার চেষ্টা করুন।");
+  }finally{ btn.disabled = false; btn.innerHTML = old; }
+});
+
+function resetForm(){
+  $("#f").reset(); setPhoto(null); syncAddr();
+  $("#occOtherWrap").hidden = true; $("#upazilaList").innerHTML = "";
+  document.querySelectorAll(".err").forEach(x=>x.classList.remove("err"));
+  $("#formStatus").textContent = ""; $("#joinDate").value = new Date().toISOString().slice(0,10);
+  $("#memberId").value = "স্বয়ংক্রিয়"; $("#icId").textContent = "স্বয়ংক্রিয়";
+  updateCard();
+}
+$("#resetBtn").addEventListener("click", ()=>{ if(confirm("ফর্মের সব তথ্য মুছে ফেলবেন?")){ resetForm(); refreshId(); } });
+$("#againBtn").addEventListener("click", ()=>{ document.body.classList.remove("finished"); resetForm(); refreshId(); window.scrollTo({top:0}); });
+
+/* ============ শুরু ============ */
+$("#joinDate").value = new Date().toISOString().slice(0,10);
+$("#dob").max = new Date().toISOString().slice(0,10);
+updateCard(); refreshId();
+</script>
+</body>
+</html>
